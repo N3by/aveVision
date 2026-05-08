@@ -18,6 +18,7 @@ export default function ResultCard({ result, preview, onReset }) {
   const [barWidth, setBarWidth] = useState(0)
 
   useEffect(() => {
+    setBarWidth(0)
     const timer = setTimeout(() => setBarWidth(result.confianza * 100), 300)
     return () => clearTimeout(timer)
   }, [result.confianza])
@@ -69,8 +70,8 @@ export default function ResultCard({ result, preview, onReset }) {
           Datos curiosos
         </h3>
         <ul className="flex flex-col gap-3">
-          {result.datos_curiosos.map((fact, i) => (
-            <li key={i} className="flex items-start gap-2 text-primary text-sm leading-relaxed">
+          {result.datos_curiosos.map((fact) => (
+            <li key={fact.slice(0, 20)} className="flex items-start gap-2 text-primary text-sm leading-relaxed">
               <FeatherIcon />
               <span>{fact}</span>
             </li>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Header from './components/Header'
 import UploadZone from './components/UploadZone'
 import LoadingView from './components/LoadingView'
@@ -7,16 +7,18 @@ import Footer from './components/Footer'
 import { mockResult } from './data/mockResult'
 
 export default function App() {
-  const [phase, setPhase] = useState('idle') // 'idle' | 'loading' | 'result'
+  const [phase, setPhase] = useState('idle')
   const [preview, setPreview] = useState(null)
+  const timerRef = useRef(null)
 
   function handleUpload(file) {
     setPreview(URL.createObjectURL(file))
     setPhase('loading')
-    setTimeout(() => setPhase('result'), 2000)
+    timerRef.current = setTimeout(() => setPhase('result'), 2000)
   }
 
   function handleReset() {
+    clearTimeout(timerRef.current)
     if (preview) URL.revokeObjectURL(preview)
     setPreview(null)
     setPhase('idle')

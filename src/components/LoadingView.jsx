@@ -13,9 +13,9 @@ export default function LoadingView() {
         Analizando imagen...
       </p>
       <div className="flex gap-2">
-        {[0, 0.15, 0.3].map((delay, i) => (
+        {[0, 0.15, 0.3].map((delay) => (
           <span
-            key={i}
+            key={delay}
             className="w-2.5 h-2.5 bg-forest rounded-full animate-bounce"
             style={{ animationDelay: `${delay}s` }}
           />
