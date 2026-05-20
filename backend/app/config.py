@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     model_blob_name: str = "model.pkl"
 
     # Firebase
-    firebase_project_id: str = "your-project-id"
+    firebase_project_id: str | None = None
 
     # CORS
     frontend_url: str = "http://localhost:5173"
