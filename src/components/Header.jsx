@@ -2,9 +2,18 @@ import BlackbirdIcon from '../assets/BlackbirdIcon'
 
 const BADGES = ['CNN', 'CLASIFICACIÓN', 'DEEP LEARNING', 'UNIAGUSTINIANA']
 
-export default function Header() {
+export default function Header({ onSignOut }) {
   return (
-    <header className="text-center w-full max-w-2xl">
+    <header className="text-center w-full max-w-2xl relative">
+      {onSignOut && (
+        <button
+          type="button"
+          onClick={onSignOut}
+          className="absolute right-0 top-0 text-xs text-muted hover:text-coffee transition-colors"
+        >
+          Salir
+        </button>
+      )}
       <div className="animate-bob inline-block text-forest">
         <BlackbirdIcon className="w-16 h-16 mx-auto" />
       </div>
