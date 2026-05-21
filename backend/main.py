@@ -7,12 +7,13 @@ from app.routers import auth, classify
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load model at startup (skip in test mode)
     import os
     if os.getenv("TESTING") != "1":
         from app.services.model import load_model_from_gcs
         load_model_from_gcs()
     yield
+    from app.database import close_db
+    await close_db()
 
 
 app = FastAPI(title="AveVision API", lifespan=lifespan)
