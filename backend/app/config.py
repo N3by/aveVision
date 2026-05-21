@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     db_password: str | None = None
     db_name: str | None = None
 
+    # Local model path (overrides GCS in dev)
+    local_model_path: str | None = None
+
     # GCS
     gcs_bucket_name: str = "avevision-models"
     model_blob_name: str = "model.pkl"
