@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Depends, UploadFile, File
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import get_db
 from app.schemas.classify import ClassifyResponse, Metrics
 from app.services.firebase import verify_token
 from app.services.model import run_inference
@@ -13,7 +11,6 @@ router = APIRouter(tags=["classify"])
 async def classify_image(
     file: UploadFile = File(...),
     token: dict = Depends(verify_token),
-    db: AsyncSession = Depends(get_db),
 ) -> ClassifyResponse:
     image_bytes = await file.read()
     inference = run_inference(image_bytes)
