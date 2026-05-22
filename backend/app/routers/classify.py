@@ -1,5 +1,8 @@
+import logging
+
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.database import get_db
 from app.models.request_log import RequestLog
 from app.schemas.classify import ClassifyResponse, Metrics
@@ -7,6 +10,7 @@ from app.services.firebase import verify_token
 from app.services.model import run_inference
 from app.data.species_data import get_species_info
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["classify"])
 
 
@@ -29,8 +33,12 @@ async def classify_image(
         ram_mb=inference["ram_mb"],
         cpu_percent=inference["cpu_percent"],
     )
-    db.add(log)
-    await db.commit()
+    try:
+        db.add(log)
+        await db.commit()
+    except Exception:
+        logger.exception("Failed to persist RequestLog for user %s", token["uid"])
+        await db.rollback()
 
     return ClassifyResponse(
         especie=species["especie"],
