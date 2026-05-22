@@ -79,6 +79,31 @@ export default function ResultCard({ result, preview, onReset }) {
         </ul>
       </div>
 
+      {result.metrics && (
+        <div>
+          <h3 className="text-coffee font-semibold mb-3 uppercase text-xs tracking-wider">
+            Métricas de inferencia
+          </h3>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center gap-1">
+              <span className="text-lg font-bold text-forest">{result.metrics.latency_ms}</span>
+              <span className="text-xs text-muted uppercase tracking-wider">ms</span>
+              <span className="text-xs text-muted">Latencia</span>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center gap-1">
+              <span className="text-lg font-bold text-forest">{result.metrics.ram_mb.toFixed(1)}</span>
+              <span className="text-xs text-muted uppercase tracking-wider">MB</span>
+              <span className="text-xs text-muted">RAM</span>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center gap-1">
+              <span className="text-lg font-bold text-forest">{result.metrics.cpu_percent.toFixed(1)}</span>
+              <span className="text-xs text-muted uppercase tracking-wider">%</span>
+              <span className="text-xs text-muted">CPU</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <button
         type="button"
         onClick={onReset}
