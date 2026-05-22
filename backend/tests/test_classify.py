@@ -54,7 +54,7 @@ async def test_classify_requires_auth(client_no_auth):
 @pytest.mark.asyncio
 async def test_get_requests_returns_history(client_with_auth, mock_session):
     """GET /requests returns the authenticated user's classification history."""
-    from unittest.mock import AsyncMock
+    from unittest.mock import MagicMock, AsyncMock
 
     fake_log = RequestLog(
         id=1,
@@ -67,7 +67,7 @@ async def test_get_requests_returns_history(client_with_auth, mock_session):
         cpu_percent=7.1,
         created_at=None,
     )
-    mock_result = AsyncMock()
+    mock_result = MagicMock()
     mock_result.scalars.return_value.all.return_value = [fake_log]
     mock_session.execute = AsyncMock(return_value=mock_result)
 

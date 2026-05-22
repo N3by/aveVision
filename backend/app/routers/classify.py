@@ -2,10 +2,12 @@ import logging
 
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from app.database import get_db
 from app.models.request_log import RequestLog
 from app.schemas.classify import ClassifyResponse, Metrics
+from app.schemas.request_log import RequestLogResponse
 from app.services.firebase import verify_token
 from app.services.model import run_inference
 from app.data.species_data import get_species_info
@@ -52,3 +54,14 @@ async def classify_image(
             cpu_percent=inference["cpu_percent"],
         ),
     )
+
+
+@router.get("/requests", response_model=list[RequestLogResponse])
+async def get_requests(
+    token: dict = Depends(verify_token),
+    db: AsyncSession = Depends(get_db),
+) -> list[RequestLogResponse]:
+    result = await db.execute(
+        select(RequestLog).where(RequestLog.user_id == token["uid"])
+    )
+    return result.scalars().all()
