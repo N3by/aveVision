@@ -92,3 +92,23 @@ async def test_get_requests_requires_auth(client_no_auth):
     async with client_no_auth as client:
         response = await client.get("/requests")
     assert response.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_classify_response_includes_metrics(client_with_auth, mock_session):
+    """POST /classify response body must include a metrics object with latency, RAM, and CPU."""
+    with patch("app.routers.classify.run_inference", return_value=FAKE_INFERENCE):
+        async with client_with_auth as client:
+            response = await client.post(
+                "/classify",
+                files={"file": ("bird.jpg", FAKE_IMAGE, "image/jpeg")},
+                headers={"Authorization": "Bearer fake-token"},
+            )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert "metrics" in data, "Response must contain a 'metrics' key"
+    metrics = data["metrics"]
+    assert metrics["latency_ms"] == 85
+    assert metrics["ram_mb"] == 12.4
+    assert metrics["cpu_percent"] == 7.1
