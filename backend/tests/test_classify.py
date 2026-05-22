@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
+from unittest.mock import patch
 from app.models.request_log import RequestLog
 
 
@@ -34,6 +34,9 @@ async def test_classify_inserts_request_log(client_with_auth, mock_session):
     assert added.confidence == 0.9123
     assert added.user_id == "test-uid-123"
     assert added.image_filename == "bird.jpg"
+    assert added.latency_ms == 85
+    assert added.ram_mb == 12.4
+    assert added.cpu_percent == 7.1
     assert mock_session.commit.called
 
 
